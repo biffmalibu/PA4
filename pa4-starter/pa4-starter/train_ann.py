@@ -56,10 +56,16 @@ def main():
             cv_folds = int(arg[4:])
         elif arg.startswith('-ern='):
             network.epoch_report_n = int(arg[5:])
-        # TODO Basic 4: read in the other command line arguments except for -n; 
-        # store them in the correct variables (either local variables or in the
-        # network object; use context to assist you).
-        # TODO Advanced 3: read in the -n option (same rules as TODO Basic 4).
+        elif arg.startswith('-lr='):
+            network.learning_rate = float(arg[4:])
+        elif arg.startswith('-e='):
+            network.epochs = int(arg[3:])
+        elif arg.startswith('-hl='):
+            network.hidden_layers = int(arg[4:])
+        elif arg.startswith('-hln='):
+            network.nodes_per_hidden_layer = int(arg[5:])
+        elif arg == '-scale':
+            network.scale_features = True
 
     print('Settings:',
           f'    Training file: {train_file}',
@@ -78,8 +84,22 @@ def main():
     train_data = network.load_and_process_data(train_file, skip_header)
 
 
-    # TODO Basic 5: if a test file is provided, train on the training data and test on the test data
-    # instead of doing cross-validation. Report the accuracy of the test data.
+    if test_file:
+        # Load test data.
+        test_data = network.load_and_process_data(test_file, skip_header)
+        
+        # Train the network on the training data.
+        network.train(train_data)
+        
+        # Test the network on the test data.
+        accuracy = network.test(test_data)
+        
+        print(f'Test accuracy: {accuracy}%')
+    else:
+        # Run cross-validation on the training data.
+        accuracies, meanAccuracy = network.cross_validate(train_data, cv_folds)
+        print(f'Accuracy by fold: {accuracies}%')
+        print(f'Mean accuracy: {meanAccuracy}%')
 
     # TODO Advanced 4: Update this to also avoid CV if a network file is provided; and make sure to save the network to the file.
 

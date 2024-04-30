@@ -48,6 +48,7 @@ def main():
     network_data = network.load(network_file)
 
     if eval_mode:
+        print('Evaluating network...')
         # Load data.
         # TODO Advanced 5: Implement the code to parse the test data and evaluate it 
         # with the network. This should report the accuracy.

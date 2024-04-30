@@ -153,14 +153,13 @@ def train_network(network, train, l_rate, n_epoch, n_outputs, epoch_report_n=50)
     print('Training network...', end='')
     for epoch in range(n_epoch):
         # TODO Basic 1: The code between ## START and ## END should only be executed every epoch_report_n epochs.
-        ## START
-        correct = 0
-        for row in train:
-            if row[-1] == predict(network, row):
-                correct += 1
-        print(f'\n  Accuracy on train: {correct/len(train)*100:.2f}%')
-        print(f'  Epoch {epoch}', end='')
-        ## END
+        if (epoch + 1) % epoch_report_n == 0:
+            correct = 0
+            for row in train:
+                if row[-1] == predict(network, row):
+                    correct += 1
+            print(f'\n  Accuracy on train: {correct/len(train)*100:.2f}%')
+            print(f'  Epoch {epoch}', end='')
         print('.', end='', flush=True)
         
         for row in train:
@@ -180,16 +179,17 @@ def train_network(network, train, l_rate, n_epoch, n_outputs, epoch_report_n=50)
 
 # Initialize a network
 def initialize_network(n_inputs, n_hidden_layers, n_hidden_nodes, n_outputs):
-    # TODO Basic 2: this currently assumes only one hidden layer. Update it to support the number of
-    # hidden layers specified by n_hidden_layers.
-    
     network = list()
 
-    hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden_nodes)]
-    network.append(hidden_layer)
+    for _ in range(n_hidden_layers):
+        hidden_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_hidden_nodes)]
+        network.append(hidden_layer)
 
-    output_layer = [{'weights':[random() for i in range(n_hidden_nodes + 1)]} for i in range(n_outputs)]
+        n_inputs = n_hidden_nodes
+
+    output_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_outputs)]
     network.append(output_layer)
+    
     return network
 
 # Make a prediction with a network
@@ -238,7 +238,7 @@ class ArtificalNeuralNetwork:
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         self.network = initialize_network(n_inputs, self.hidden_layers, self.nodes_per_hidden_layer, n_outputs)
-        # TODO Basic 3: train the network (HINT: there is a helper function above for this).
+        train_network(self.network, train_data, self.learning_rate, self.epochs, n_outputs, self.epoch_report_n)
 
     def eval(self, test_data):
         '''Evaluates the network using the test data.
