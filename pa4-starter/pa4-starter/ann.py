@@ -3,9 +3,12 @@ File: ann.py
 Authors: 
     Jason Brownlee (original code, see link below)
     Hank Feild (added additional structure, functions, and TODOs for PA4)
+    Author: Bradford Torpey 
 Source: https://machinelearningmastery.com/implement-backpropagation-algorithm-scratch-python/
 Purpose: Provides functions to train, run, and evaluate a multilayered perceptron neural network.
          Currently, it only supports multiclass classification.
+
+Github copilot was used to create the initialize_network function and for error checking
 '''
 
 # PA4 NOTE: You may not use any libraries byond what is already provided below.
@@ -153,11 +156,11 @@ def train_network(network, train, l_rate, n_epoch, n_outputs, epoch_report_n=50)
     print('Training network...', end='')
     for epoch in range(n_epoch):
         # TODO Basic 1: The code between ## START and ## END should only be executed every epoch_report_n epochs.
-        if (epoch + 1) % epoch_report_n == 0:
-            correct = 0
-            for row in train:
-                if row[-1] == predict(network, row):
-                    correct += 1
+        if (epoch + 1) % epoch_report_n == 0:  # the epoch is a multiple of epoch_report_n
+            correct = 0 # initialize the number of correct predictions to 0
+            for row in train: # for each row in the training data
+                if row[-1] == predict(network, row): # if the prediction is correct
+                    correct += 1 # increment the number of correct predictions
             print(f'\n  Accuracy on train: {correct/len(train)*100:.2f}%')
             print(f'  Epoch {epoch}', end='')
         print('.', end='', flush=True)
@@ -180,15 +183,16 @@ def train_network(network, train, l_rate, n_epoch, n_outputs, epoch_report_n=50)
 # Initialize a network
 def initialize_network(n_inputs, n_hidden_layers, n_hidden_nodes, n_outputs):
     network = list()
+    # This section of code was produced by github copilot
+    for _ in range(n_hidden_layers): # for each hidden layer
+        hidden_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_hidden_nodes)] # create a list of dictionaries, each with a 'weights' key that contains a list of random weights
+        network.append(hidden_layer) # append the hidden layer to the network
 
-    for _ in range(n_hidden_layers):
-        hidden_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_hidden_nodes)]
-        network.append(hidden_layer)
+        n_inputs = n_hidden_nodes # set the number of inputs to the number of hidden nodes for the next layer
 
-        n_inputs = n_hidden_nodes
-
-    output_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_outputs)]
-    network.append(output_layer)
+    output_layer = [{'weights':[random() for _ in range(n_inputs + 1)]} for _ in range(n_outputs)] # create the output layer
+    network.append(output_layer) # append the output layer to the network
+    # End of copilot code
     
     return network
 
@@ -238,7 +242,7 @@ class ArtificalNeuralNetwork:
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         self.network = initialize_network(n_inputs, self.hidden_layers, self.nodes_per_hidden_layer, n_outputs)
-        train_network(self.network, train_data, self.learning_rate, self.epochs, n_outputs, self.epoch_report_n)
+        train_network(self.network, train_data, self.learning_rate, self.epochs, n_outputs, self.epoch_report_n) # train the network
 
     def eval(self, test_data):
         '''Evaluates the network using the test data.

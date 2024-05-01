@@ -1,6 +1,7 @@
 '''
 File: train-ann.py
 Author: Hank Feild
+Author: Bradford Torpey
 Date: 2024-04-19
 Purpose: Provides an interface for training and evaluating an artificial neural network.
 '''
