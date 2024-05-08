@@ -4,6 +4,7 @@ Authors:
     Jason Brownlee (original code, see link below)
     Hank Feild (added additional structure, functions, and TODOs for PA4)
     Author: Bradford Torpey 
+    Edited: 5/8/2024
 Source: https://machinelearningmastery.com/implement-backpropagation-algorithm-scratch-python/
 Purpose: Provides functions to train, run, and evaluate a multilayered perceptron neural network.
          Currently, it only supports multiclass classification.

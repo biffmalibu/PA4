@@ -3,7 +3,10 @@ File: train-ann.py
 Author: Hank Feild
 Author: Bradford Torpey
 Date: 2024-04-19
+Edited: 5/8/2024
 Purpose: Provides an interface for training and evaluating an artificial neural network.
+
+Github copilot was used to help me solve a couple errors I was experiencing for the command line parser.
 '''
 
 import sys
