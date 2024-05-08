@@ -50,6 +50,7 @@ def main():
     for arg in sys.argv:
         if arg.startswith('-f='):
             train_file = arg[3:]
+        elif arg.startswith('-t='):
             test_file = arg[3:]
         elif arg == '-header':
             skip_header = True
@@ -67,6 +68,7 @@ def main():
             network.nodes_per_hidden_layer = int(arg[5:])
         elif arg == '-scale':
             network.scale_features = True
+
 
     print('Settings:',
           f'    Training file: {train_file}',
@@ -92,8 +94,8 @@ def main():
         # Train the network on the training data.
         network.train(train_data)
         
-        # Test the network on the test data.
-        accuracy = network.test(test_data)
+        # Evaluate the network on the test data.
+        accuracy = network.eval(test_data)
         
         print(f'Test accuracy: {accuracy}%')
     else:
@@ -102,12 +104,7 @@ def main():
         print(f'Accuracy by fold: {accuracies}%')
         print(f'Mean accuracy: {meanAccuracy}%')
 
-    # TODO Advanced 4: Update this to also avoid CV if a network file is provided; and make sure to save the network to the file.
 
-    # Run cross-validation on the one data file.
-    accuracies, meanAccuracy = network.cross_validate(train_data, cv_folds)
-    print(f'Accuracy by fold: {accuracies}%')
-    print(f'Mean accuracy: {meanAccuracy}%')
 
 if __name__ == '__main__':
     main()
